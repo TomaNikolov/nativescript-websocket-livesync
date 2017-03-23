@@ -1,0 +1,21 @@
+{
+  "name": "nativescript-websocket-livesync",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "nativescript": {
+    "platforms": {
+      "ios": "2.0.0",
+      "android": "2.0.0"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nativescript-delivery": "git+https://github.com/TomaNikolov/nativescript-delivery.git",
+    "nativescript-socket-io": "git+https://github.com/triniwiz/nativescript-socketio.git#c6dde9a151f2088aad097549770162156292943e"
+  }
+}
