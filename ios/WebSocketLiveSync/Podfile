@@ -1,0 +1,5 @@
+# 'Socket.IO-Client-Swift', :git => 'https://github.com/socketio/socket.io-client-swift.git'
+target 'WebSocketLiveSync' do
+  pod 'Socket.IO-Client-Swift', '8.0.2'
+  use_frameworks!
+end
