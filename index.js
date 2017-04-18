@@ -1,81 +1,89 @@
 "use strict";
 
-const application = require("application");
-const applicationSetting = require("application-settings");
-const connectionMAnager = require("./websocket-connection-manager");
+require('./lifecycle-events');
 
-const serverUrl = "serverUrl";
+// const application = require("application");
+// const applicationSetting = require("application-settings");
+// const connectionMAnager = require("./websocket-connection-manager");
 
-if (application.ios) {
-	const MyDelegate = (function (_super) {
-		__extends(MyDelegate, _super);
-		function MyDelegate() {
-			_super.apply(this, arguments);
-		}
+// const serverUrl = "serverUrl";
 
-		MyDelegate.prototype.applicationOpenURLSourceApplicationAnnotation = function (application, url, sourceApplication, annotation) {
-			const bundleURLTypes = NSBundle.mainBundle.infoDictionary.objectForKey("CFBundleURLTypes");
-			const appScheme = bundleURLTypes.firstObject.objectForKey("CFBundleURLSchemes").firstObject;
-			const schema = `${appScheme}://socketurl=`;
-			if (url.toString().indexOf(schema) > -1) {
-				saveUrl(url, schema);
-			} else {
-				try {
-					enableLiveSyncPlugin(url);
-				} catch (err) {
-					console.log(JSON.stringify(err));
-				}
-			}
-		};
+// if (application.ios) {
+// 	const MyDelegate = (function (_super) {
+// 		__extends(MyDelegate, _super);
+// 		function MyDelegate() {
+// 			_super.apply(this, arguments);
+// 		}
 
-		MyDelegate.prototype.applicationDidBecomeActive = function (application) {
-			if(NSUserDefaults.standardUserDefaults().objectForKey("isAppetize")) {
-				const conectionUrl = NSUserDefaults.standardUserDefaults().objectForKey(serverUrl);
-				if(conectionUrl) {
-					applicationSetting.setString(serverUrl, conectionUrl);
-				}
-			}
+// 		MyDelegate.prototype.applicationOpenURLSourceApplicationAnnotation = function (application, url, sourceApplication, annotation) {
+// 			const bundleURLTypes = NSBundle.mainBundle.infoDictionary.objectForKey("CFBundleURLTypes");
+// 			const appScheme = bundleURLTypes.firstObject.objectForKey("CFBundleURLSchemes").firstObject;
+// 			const schema = `${appScheme}://socketurl=`;
+// 			if (url.toString().indexOf(schema) > -1) {
+// 				saveUrl(url, schema);
+// 			} else {
+// 				try {
+// 					enableLiveSyncPlugin(url);
+// 				} catch (err) {
+// 					console.log(JSON.stringify(err));
+// 				}
+// 			}
+// 		};
 
-			const socketurl = applicationSetting.getString(serverUrl);
-			if (serverUrl) {
-				connectionMAnager.openConnection(serverUrl);
-			}
-		};
+// 		MyDelegate.prototype.applicationDidBecomeActive = function (application) {
+// 			if (NSUserDefaults.standardUserDefaults().objectForKey("isAppetize")) {
+// 				const conectionUrl = NSUserDefaults.standardUserDefaults().objectForKey(serverUrl);
+// 				if (conectionUrl) {
+// 					applicationSetting.setString(serverUrl, conectionUrl);
+// 				}
+// 			}
 
-		MyDelegate.ObjCProtocols = [UIApplicationDelegate];
+// 			const socketurl = applicationSetting.getString(serverUrl);
+// 			if (serverUrl) {
+// 				connectionMAnager.openConnection(serverUrl);
+// 			}
+// 		};
 
-		return MyDelegate;
-	})(UIResponder);
+// 		MyDelegate.ObjCProtocols = [UIApplicationDelegate];
 
-	application.ios.delegate - MyDelegate;
-} else {
-	application.android.on(application.AndroidApplication.activityCreatedEvent, function (args) {
-		if (args.activity.getIntent().getBooleanExtra("isAppetize")) {
-			const conectionUrl = args.activity.getIntent().getStringExtra(serverUrl);
-			if (conectionUrl) {
-				applicationSetting.setString(serverUrl, conectionUrl);
-			}
-		}
+// 		return MyDelegate;
+// 	})(UIResponder);
 
-		if (new String(args.activity.getIntent().getAction()).valueOf() == new String(android.content.Intent.ACTION_VIEW).valueOf()) {
-			// TODO: get schema from intent
-			const url = args.activity.getIntent().getData();
-			if (url){
+// 	application.ios.delegate - MyDelegate;
+// } else {
+// 	application.android.on(application.AndroidApplication.activityCreatedEvent, function (args) {
+// 		if (args.activity.getIntent().getBooleanExtra("isAppetize", false)) {
+// 			const conectionUrl = args.activity.getIntent().getStringExtra(serverUrl);
+// 			if (conectionUrl) {
+// 				applicationSetting.setString(serverUrl, conectionUrl);
+// 			}
+// 		}
 
-			}
-		} else {
-			enableLiveSyncPlugin(url);
-		}
-	});
-}
+// 		if (new String(args.activity.getIntent().getAction()).valueOf() == new String(android.content.Intent.ACTION_VIEW).valueOf()) {
+// 			// TODO: get schema from intent
+// 			const url = args.activity.getIntent().getData();
+// 			if (url) {
+// 				enableLiveSyncPlugin(url);
+// 			}
+// 		} else {
 
-function saveUrl(url, schema) {
-	const socketurl = url.toString().replace(schema, "");
-	applicationSetting.setString(serverUrl, socketurl);
-}
+// 		}
 
-function enableLiveSyncPlugin(url) {
-	const liveSync = require("nativescript-plugin-livesync");
-	liveSync.enable(true);
-	return liveSync(url);
-}
+// 		const socketurl = applicationSetting.getString(serverUrl);
+// 		console.log('*******', socketurl, '*******')
+// 		if (serverUrl) {
+// 			connectionMAnager.openConnection(serverUrl);
+// 		}
+// 	});
+// }
+
+// function saveUrl(url, schema) {
+// 	const socketurl = url.toString().replace(schema, "");
+// 	applicationSetting.setString(serverUrl, socketurl);
+// }
+
+// function enableLiveSyncPlugin(url) {
+// 	const liveSync = require("nativescript-plugin-livesync");
+// 	liveSync.enable(true);
+// 	return liveSync(url);
+// }

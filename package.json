@@ -10,12 +10,12 @@
     }
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "node postinstall.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nativescript-delivery": "git+https://github.com/TomaNikolov/nativescript-delivery.git",
-    "nativescript-socket-io": "git+https://github.com/triniwiz/nativescript-socketio.git#c6dde9a151f2088aad097549770162156292943e"
+    "nativescript-delivery": "git+https://github.com/TomaNikolov/nativescript-delivery.git#53fa6d3d53dbc912682ffd3c2c176a79f85d6801",
+    "nativescript-socket.io": "0.5.0"
   }
 }

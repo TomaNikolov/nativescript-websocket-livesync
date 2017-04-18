@@ -28,6 +28,6 @@ function getAfterPrepareHookDir() {
 }
 exports.getAfterPrepareHookDir = getAfterPrepareHookDir;
 function getHookFilePath() {
-    return path.join(getAfterPrepareHookDir(), "filelogger.js");
+    return path.join(getAfterPrepareHookDir(), "nativescript-websocket-livesync.js");
 }
 exports.getHookFilePath = getHookFilePath;

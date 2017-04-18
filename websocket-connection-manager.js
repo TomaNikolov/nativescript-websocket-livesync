@@ -1,13 +1,13 @@
 let dl = require('delivery').server;
 let SocketIO = require('nativescript-socket.io');
 let liveSync = require('./live-sync');
-
+console.log('************%', JSON.stringify(SocketIO))
 function openConnection(socketUrl) {
-	let socketIO = SocketIO.connect(socketUrl, {});
+	let socketIO = SocketIO.connect(/*socketUrl.trim() ||*/ 'https://d2cfb948.ngrok.io', {});
+	let delivery = dl.listen(socketIO);
 	socketIO.on('connect', () => {
-		let delivery = dl.listen(socketIO);
 		delivery.on('receive.success', (file) => {
-			livesync(file.buffer);
+			liveSync.syncApplication(file.buffer);
 		});
 
 		delivery.on('receive.start', (fileUID) => {

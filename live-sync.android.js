@@ -1,6 +1,6 @@
 "use strict";
 
-function livesync(syncApplication) {
+function syncApplication(byteArrayInputStream) {
 	const zipStream = new java.util.zip.ZipInputStream(byteArrayInputStream);
 	const context = com.tns.NativeScriptApplication.getInstance();
 	const outputPath = context.getFilesDir();

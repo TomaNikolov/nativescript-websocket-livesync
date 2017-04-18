@@ -8,7 +8,7 @@ module.exports = function ($platformsData, hookArgs) {
         tnsModulesPath = path.join(platformData.appDestinationDirectoryPath, 'app/tns_modules'),
 
     // Inject console-via-logger and ion-info-generator modules at app entry point
-    var applicationFilePath = path.join(tnsModulesPath, 'tns-core-modules', 'application', 'application.js'),
+        applicationFilePath = path.join(tnsModulesPath, 'tns-core-modules', 'application', 'application.js'),
         applicationFileContent = fs.readFileSync(applicationFilePath).toString();
 
     // Check if the custom requires are not injected yet, because the after-prepare hook will be invoked twice (On prepare command and on build command which will invoke prepare internally)
