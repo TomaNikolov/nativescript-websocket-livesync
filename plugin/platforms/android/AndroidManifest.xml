@@ -3,7 +3,7 @@
 
 	<application>
 		<service
-			android:name="org.nativescript.LiveSyncIntentService"
+			android:name="com.telerik.websocketlivesync.ConnectionService"
 			android:enabled="true"
 			android:exported="false" />
 	</application>

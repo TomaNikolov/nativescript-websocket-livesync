@@ -1,6 +1,6 @@
 const application = require("application");
 const applicationSetting = require("application-settings");
-const connectionMAnager = require("./websocket-connection-manager");
+const connectionManager = require("./websocket-connection-manager");
 
 const serverUrl = "serverUrl";
 
@@ -27,15 +27,15 @@ const MyDelegate = (function (_super) {
 
     MyDelegate.prototype.applicationDidBecomeActive = function (application) {
         if (NSUserDefaults.standardUserDefaults().objectForKey("isAppetize")) {
-            const conectionUrl = NSUserDefaults.standardUserDefaults().objectForKey(serverUrl);
-            if (conectionUrl) {
-                applicationSetting.setString(serverUrl, conectionUrl);
+            const connectionUrl = NSUserDefaults.standardUserDefaults().objectForKey(serverUrl);
+            if (connectionUrl) {
+                applicationSetting.setString(serverUrl, connectionUrl);
             }
         }
 
-        const socketurl = applicationSetting.getString(serverUrl);
+        const connectionUrl = applicationSetting.getString(serverUrl);
         if (serverUrl) {
-            connectionMAnager.openConnection(serverUrl);
+            connectionManager.openConnection(serverUrl);
         }
     };
 
@@ -48,8 +48,8 @@ application.ios.delegate - MyDelegate;
 
 
 function saveUrl(url, schema) {
-    const socketurl = url.toString().replace(schema, "");
-    applicationSetting.setString(serverUrl, socketurl);
+    const socketUrl = url.toString().replace(schema, "");
+    applicationSetting.setString(serverUrl, socketUrl);
 }
 
 function enableLiveSyncPlugin(url) {

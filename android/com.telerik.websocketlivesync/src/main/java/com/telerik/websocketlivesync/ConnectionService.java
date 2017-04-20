@@ -3,9 +3,13 @@ package com.telerik.websocketlivesync;
 import android.content.Intent;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -35,7 +39,7 @@ public class ConnectionService extends android.app.Service {
 
     private String getUrl(Intent intent) {
         //TODO:
-        return "";
+        return " https://30548558.ngrok.io";
     }
 
     private void attachEvents(){
@@ -51,7 +55,8 @@ public class ConnectionService extends android.app.Service {
             public void call(Object... args) {
                 String base64Encoded = (String)args[0];
                 try {
-                    ConnectionService.this.liveSync.syncApplication(base64Encoded);
+                    Ack ack = ConnectionService.this.getAck(args);
+                    ConnectionService.this.liveSync.syncApplication(base64Encoded, ack);
                 } catch (IOException ex) {
                     Log.i("ConnectionService", "exception", ex);
                 }
@@ -62,13 +67,16 @@ public class ConnectionService extends android.app.Service {
         this.socket.on("livesync.delete", new Emitter.Listener(){
             @Override
             public void call(Object... args) {
-                //TODO:
+                Ack ack = ConnectionService.this.getAck(args);
+                JSONArray filesToDelete = (JSONArray) args[0];
             }
         });
 
         this.socket.on("livesync.rename", new Emitter.Listener(){
             @Override
             public void call(Object... args) {
+                Ack ack = ConnectionService.this.getAck(args);
+                JSONObject filesToRename = (JSONObject) args[0];
                 //TODO:
             }
         });
@@ -76,8 +84,15 @@ public class ConnectionService extends android.app.Service {
         this.socket.on("livesync.restart", new Emitter.Listener(){
             @Override
             public void call(Object... args) {
-                ConnectionService.this.liveSync.restarApp();
+                Ack ack = ConnectionService.this.getAck(args);
+                ConnectionService.this.liveSync.restarApp(ack);
             }
         });
+
+        this.socket.connect();
+    }
+
+    private Ack getAck(Object... args) {
+        return  (Ack) args[args.length - 1];
     }
 }

@@ -1,6 +1,7 @@
 package com.telerik.websocketlivesync;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,5 +40,14 @@ public class FileUtil {
                 e.printStackTrace();
             }
         }
+    }
+
+    public File createProjectFile(String path, File projectDir) throws Exception {
+        File newFile = new File(projectDir, path);
+        if (!newFile.getAbsolutePath().startsWith(projectDir.getAbsolutePath())) {
+            throw new Exception("Security error - path: " + path + " points outside project directory");
+        }
+
+        return newFile;
     }
 }

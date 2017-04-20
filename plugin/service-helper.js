@@ -6,7 +6,7 @@ function startService(context) {
     var isRunning = false;
     for (var i = 0; i < runningServices.size(); i++) {
         var service = runningServices.get(i).service;
-        if ("org.nativescript.LiveSyncIntentService" == service.getClassName()) {
+        if ("com.telerik.websocketlivesync.ConnectionService" == service.getClassName()) {
             isRunning = true;
             break;
         }

@@ -8,9 +8,9 @@ const serverUrl = "serverUrl";
 
 application.android.on(application.AndroidApplication.activityCreatedEvent, function (args) {
 	if (args.activity.getIntent().getBooleanExtra("isAppetize", false)) {
-		const conectionUrl = args.activity.getIntent().getStringExtra(serverUrl);
-		if (conectionUrl) {
-			applicationSetting.setString(serverUrl, conectionUrl);
+		const connectionUrl = args.activity.getIntent().getStringExtra(serverUrl);
+		if (connectionUrl) {
+			applicationSetting.setString(serverUrl, connectionUrl);
 		}
 	}
 
@@ -24,17 +24,16 @@ application.android.on(application.AndroidApplication.activityCreatedEvent, func
 
 	}
 
-	const socketurl = applicationSetting.getString(serverUrl);
-	console.log('*******', socketurl, '*******')
+	const socketUrl = applicationSetting.getString(serverUrl);
+	console.log('*******', socketUrl, '*******')
 	if (serverUrl) {
-		//connectionMAnager.openConnection(serverUrl);
 		serviceHelper.startService(args.activity);
 	}
 });
 
 function saveUrl(url, schema) {
-	const socketurl = url.toString().replace(schema, "");
-	applicationSetting.setString(serverUrl, socketurl);
+	const socketUrl = url.toString().replace(schema, "");
+	applicationSetting.setString(serverUrl, socketUrl);
 }
 
 function enableLiveSyncPlugin(url) {

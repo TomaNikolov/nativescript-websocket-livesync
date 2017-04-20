@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -16,15 +19,19 @@ import java.lang.reflect.Method;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import io.socket.client.Ack;
+
 public class WebSocketLiveSync {
 
     private final Context context;
+    private final File projectDir;
 
     public WebSocketLiveSync(Context context) {
         this.context = context;
+        this.projectDir = context.getFilesDir();
     }
 
-    public void syncApplication(String base64Encoded) throws IOException {
+    public void syncApplication(String base64Encoded, Ack ack) throws IOException {
         ByteArrayInputStream inputStream = FileUtil.createInputStream(base64Encoded);
         ZipInputStream zipStream = null;
         try {
@@ -49,8 +56,19 @@ public class WebSocketLiveSync {
         }
     }
 
+    public void delete(JSONArray filesToDelete)  throws JSONException {
+        for (int i = 0; i < filesToDelete.length(); i++) {
+             String path = filesToDelete.getString(i);
+            
+        }
+    }
+
+    public void rename(JSONArray filesToRename) {
+        
+    }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void restarApp() {
+    public void restarApp(Ack ack) {
         this.purgeNativeScriptRuntimeProxies();
 
         Intent launchIntent = this.context.getPackageManager().getLaunchIntentForPackage(this.context.getPackageName());
