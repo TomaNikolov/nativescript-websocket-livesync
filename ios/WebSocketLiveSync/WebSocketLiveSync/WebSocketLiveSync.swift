@@ -52,9 +52,9 @@ public class WebSocketLiveSync {
         var errors = String();
         for file in files {
             do{
-                let newFileName = URL(fileURLWithPath: self.getLiveSyncDir()).appendingPathComponent(file["to"]!)
-                let filetoRename = URL(fileURLWithPath:self.getLiveSyncDir()).appendingPathComponent(file["from"]!)
-                try FileManager.default.moveItem(at: filetoRename, to: newFileName)
+                let srcFile = URL(fileURLWithPath: self.getLiveSyncDir()).appendingPathComponent(file["source"]!)
+                let dstFile = URL(fileURLWithPath:self.getLiveSyncDir()).appendingPathComponent(file["destination"]!)
+                try FileManager.default.moveItem(at: srcFile, to: dstFile)
             } catch {
                 errors += self.formatError(error: error)
                 print(error)

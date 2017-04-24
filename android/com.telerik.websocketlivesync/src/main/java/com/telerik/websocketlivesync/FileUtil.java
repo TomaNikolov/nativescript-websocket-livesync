@@ -19,7 +19,7 @@ public class FileUtil {
 
     public static ByteArrayInputStream createInputStream(String base64Encoded) {
         byte[] base64Decoded = android.util.Base64.decode(base64Encoded, android.util.Base64.DEFAULT);
-        return  new ByteArrayInputStream(base64Decoded);
+        return new ByteArrayInputStream(base64Decoded);
     }
 
     public static void extractFile(InputStream inputFileStream, boolean closeInputStream, String outputPath) throws IOException {
@@ -42,12 +42,18 @@ public class FileUtil {
         }
     }
 
-    public File createProjectFile(String path, File projectDir) throws Exception {
-        File newFile = new File(projectDir, path);
-        if (!newFile.getAbsolutePath().startsWith(projectDir.getAbsolutePath())) {
-            throw new Exception("Security error - path: " + path + " points outside project directory");
+    public static void deletePath(File filePath) throws IOException {
+        if (filePath.exists()) {
+            filePath.setWritable(true);
+            if (!filePath.delete()) {
+                throw new IOException("Cannot delete path: " + filePath.getPath());
+            }
         }
+    }
 
-        return newFile;
+    public static void renamePath(File srcPath, File dstPath) throws IOException {
+        if (!srcPath.renameTo(dstPath)) {
+            throw new IOException("Cannot rename path from: " + srcPath.getPath() + " to: " + dstPath.getPath());
+        }
     }
 }

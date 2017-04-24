@@ -11,6 +11,7 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -49,26 +50,40 @@ public class WebSocketLiveSync {
 
                 zipStream.closeEntry();
             }
-        }  finally {
+        } finally {
             if (zipStream != null) {
                 zipStream.close();
+                ack.call();
             }
         }
     }
 
-    public void delete(JSONArray filesToDelete)  throws JSONException {
+    public void delete(JSONArray filesToDelete, Ack ack) throws Exception {
         for (int i = 0; i < filesToDelete.length(); i++) {
-             String path = filesToDelete.getString(i);
-            
+            String relativeFilePath = filesToDelete.getString(i);
+            File fileToDelete = new File(projectDir, relativeFilePath);
+            Log.v("Telerik", "Delete file that is removed from server project: " + relativeFilePath);
+            FileUtil.deletePath(fileToDelete);
         }
+
+        ack.call();
     }
 
-    public void rename(JSONArray filesToRename) {
-        
+    public void rename(JSONArray filesToRename, Ack ack) throws Exception {
+        for (int i = 0; i < filesToRename.length(); i++) {
+            JSONObject fileToRename = filesToRename.getJSONObject(i);
+            String srcRelativePath = fileToRename.getString("source");
+            String destRelativePath = fileToRename.getString("destination");
+            File srcFile = new File(this.projectDir, srcRelativePath);
+            File destFile = new File(this.projectDir, destRelativePath);
+            FileUtil.renamePath(srcFile, destFile);
+        }
+
+        ack.call();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void restarApp(Ack ack) {
+    public void restartApp(Ack ack) {
         this.purgeNativeScriptRuntimeProxies();
 
         Intent launchIntent = this.context.getPackageManager().getLaunchIntentForPackage(this.context.getPackageName());
@@ -89,6 +104,7 @@ public class WebSocketLiveSync {
             }
         }
 
+        ack.call();
         // kill the process explicitly (this is needed to reset the state of the V8 VM)
         // TODO: We may want to implement a "restart" routine in the runtime itself to enable such scenarios without killing the process
         android.os.Process.killProcess(android.os.Process.myPid());
